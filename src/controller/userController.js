@@ -5,14 +5,18 @@ import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import Session from "../models/sessionModel.js";
 import sendOtpMail from "../emailVerify/sendOtpMail.js";
+import { userValidationSchema, loginValidationSchema, passwordCheckValidationSchema } from "../Validation/userValidate.js";
 
 const registerUser = async (req, res) => {
     try {
-        let { username, email, password } = req.body;
 
-        if (!username || !email || !password) {
-            return res.status(400).json({ message: "All fields are required..." })
+        const { error, value } = userValidationSchema.validate(req.body);
+
+        if (error) {
+            return res.status(400).json({ message: error.details[0].message });
         }
+
+        let { username, email, password } = value;
 
         const existingUser = await User.findOne({ email: email });
 
@@ -77,7 +81,14 @@ const verification = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-        let { email, password } = req.body;
+
+        let { error, value } = loginValidationSchema.validate(req.body)
+
+        if (error) {
+            return res.status(400).json({ message: error.details[0].message })
+        }
+
+        let { email, password } = value;
 
         if (!email || !password) {
             return res.status(400).json({ message: "Please provide email and password..." })
@@ -219,16 +230,16 @@ const verifyOtp = async (req, res) => {
 
 const changePassword = async (req, res) => {
     try {
-        const { newPassword, confirmPassword } = req.body;
+
+        let { error, value } = passwordCheckValidationSchema.validate(req.body);
+
+        if (error) {
+            console.log(error);
+            return res.status(400).json({ message: error.details[0].message })
+        }
+
+        const { newPassword } = value;
         const email = req.params.email;
-
-        if (!newPassword || !confirmPassword) {
-            return res.status(400).json("All fields are required...")
-        }
-
-        if (newPassword !== confirmPassword) {
-            return res.status(400).json({ message: "newPassword and confirmPassword does not match..." })
-        }
 
         const user = await User.findOne({ email: email });
 

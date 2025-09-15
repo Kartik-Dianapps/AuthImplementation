@@ -1,13 +1,13 @@
 import Joi from "joi";
 
 const userValidationSchema = Joi.object({
-    username: Joi.string().required(),
+    username: Joi.string().min(3).required(),
 
     email: Joi.string()
         .email({ tlds: { allow: false } })
         .required(),
 
-    password: Joi.string().required(),
+    password: Joi.string().min(8).required(),
 
     isLoggedIn: Joi.boolean().default(false),
 
@@ -20,4 +20,14 @@ const userValidationSchema = Joi.object({
     otpExpiry: Joi.date().allow(null).optional(),
 });
 
-export default userValidationSchema;
+const loginValidationSchema = Joi.object({
+    email: Joi.string().email({ tlds: { allow: false } }).required(),
+    password: Joi.string().required()
+});
+
+const passwordCheckValidationSchema = Joi.object({
+    newPassword: Joi.string().min(8).required(),
+    confirmPassword: Joi.string().valid(Joi.ref('newPassword')).required()
+})
+
+export { userValidationSchema, loginValidationSchema, passwordCheckValidationSchema };
