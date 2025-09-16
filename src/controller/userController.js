@@ -109,7 +109,6 @@ const login = async (req, res) => {
         }
 
         let { email, password } = value;
-        // Remove duplicate validations from business logic
 
         const user = await User.findOne({ email: email })
 
@@ -122,8 +121,6 @@ const login = async (req, res) => {
         if (!passwordCheck) {
             return res.status(400).json({ message: "Please Enter correct password..." })
         }
-
-        // check its email is verified or not
 
         if (!user.isVerified) {
             return res.status(403).json({ message: "First verify your email then try to login..." })
@@ -142,7 +139,6 @@ const login = async (req, res) => {
     }
 }
 
-// Logout functionality has failed : 
 const logout = async (req, res) => {
     try {
         let token = req.headers.authorization;
@@ -244,7 +240,6 @@ const verifyOtp = async (req, res) => {
     }
 }
 
-// OTP verification and changePassword Functionalities are not correct!
 const changePassword = async (req, res) => {
     try {
 

@@ -10,6 +10,6 @@ router.post("/logout", verifyToken, logout)
 router.post("/forgotPassword", forgotPassword)
 router.post("/verifyOtp", verifyOtp)
 router.post("/changePassword", changePassword)
-router.post("/profile", verifyToken, profile)
+router.get("/profile", verifyToken, profile)
 
 export default router

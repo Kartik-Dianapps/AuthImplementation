@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 import User from "../models/userModel.js";
 import Session from "../models/sessionModel.js";
-import { ObjectId } from "mongodb"
+import mongoose from "mongoose";
 
 const verifyToken = async (req, res, next) => {
     try {
@@ -18,7 +18,7 @@ const verifyToken = async (req, res, next) => {
             decoded = jwt.verify(token, process.env.SECRET_KEY);
             console.log(decoded);
 
-            const user = await Session.findOne({ token: token });
+            const user = await Session.findOne({ userId: decoded.id, token: token });
             if (!user) {
                 return res.status(400).json({ message: "User already logged out with this token..." })
             }
@@ -38,6 +38,8 @@ const verifyToken = async (req, res, next) => {
         }
 
         req.userId = user._id;
+        console.log(req.userId);
+
         next();
     }
     catch (error) {
