@@ -15,7 +15,7 @@ const sendOtpMail = async (email, otp) => {
         from: process.env.MAIL_USER,
         to: email,
         subject: "OTP for password reset...",
-        html: `<p>Your OTP for password reset is: <b>${otp}</b>. It is valid for 10 minutes.</p>`
+        html: `<p>Your OTP for password reset is: <b>${otp}</b>. It is valid for 5 minutes.</p>`
     }
 
     const info = await transporter.sendMail(mailConfigurations);

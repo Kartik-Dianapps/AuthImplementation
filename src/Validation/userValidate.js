@@ -12,12 +12,7 @@ const userValidationSchema = Joi.object({
     isLoggedIn: Joi.boolean().default(false),
 
     isVerified: Joi.boolean().default(false),
-
-    token: Joi.string().allow(null).optional(),
-
-    otp: Joi.string().allow(null).optional(),
-
-    otpExpiry: Joi.date().allow(null).optional(),
+    // Remove unnecessary payload items!
 });
 
 const loginValidationSchema = Joi.object({
@@ -27,7 +22,10 @@ const loginValidationSchema = Joi.object({
 
 const passwordCheckValidationSchema = Joi.object({
     newPassword: Joi.string().min(8).required(),
-    confirmPassword: Joi.string().valid(Joi.ref('newPassword')).required()
+    confirmPassword: Joi.string().valid(Joi.ref('newPassword')).required(),
+    email: Joi.string()
+        .email({ tlds: { allow: false } })
+        .required(),
 })
 
 export { userValidationSchema, loginValidationSchema, passwordCheckValidationSchema };

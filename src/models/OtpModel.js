@@ -1,19 +1,24 @@
 import mongoose from "mongoose";
 
-const sessionSchema = new mongoose.Schema({
+const otpSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
-    token: {
+    otp: {
         type: String,
         default: null
     },
-    tokenExpiry: {
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    otpExpiry: {
         type: Date,
         default: null
     }
 }, { timestamps: true })
 
-const Session = mongoose.model("Session", sessionSchema)
-export default Session;
+const OTP = mongoose.model("OTP", otpSchema);
+
+export default OTP

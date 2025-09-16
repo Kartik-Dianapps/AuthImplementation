@@ -1,22 +1,7 @@
 import nodemailer from "nodemailer";
 import "dotenv/config";
-import fs from "fs"
-import path from "path"
-import { fileURLToPath } from "url"
-import handlebars from "handlebars"
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
-const verifyEmail = async (token, email) => {
-
-    const emailTemplateSource = fs.readFileSync(
-        path.join(__dirname, "template.hbs"),
-        "utf-8"
-    )
-
-    const template = handlebars.compile(emailTemplateSource)
-    const htmlToSend = template({ token: encodeURIComponent(token) })
+const verifyEmail = async (email, otp) => {
 
     const transporter = nodemailer.createTransport({
         service: "gmail",
@@ -25,15 +10,12 @@ const verifyEmail = async (token, email) => {
             pass: process.env.MAIL_PSWD
         }
     })
-    console.log("MAIL_USER:", process.env.MAIL_USER);
-    console.log("MAIL_PSWD:", process.env.MAIL_PSWD);
-
 
     const mailConfigurations = {
         from: process.env.MAIL_USER,
         to: email,
-        subject: "Email Verification...",
-        html: htmlToSend
+        subject: "OTP for Email Verification...",
+        html: `<p>Your OTP for Email Verification is: <b>${otp}</b>. It is valid for 5 minutes.</p>`
     }
 
     const info = await transporter.sendMail(mailConfigurations);
@@ -41,4 +23,4 @@ const verifyEmail = async (token, email) => {
     console.log(info);
 }
 
-export default verifyEmail
+export default verifyEmail;
