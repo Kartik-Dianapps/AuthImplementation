@@ -175,7 +175,6 @@ const forgotPassword = async (req, res) => {
         const expiry = new Date(Date.now() + 5 * 60 * 1000)
 
         // Step 4 - save the otp and its expiry
-        const time = new Date();
         const existingOtp = await OTP.findOne({ userId: user._id })
         console.log(existingOtp);
 
