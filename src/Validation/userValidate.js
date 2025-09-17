@@ -7,12 +7,7 @@ const userValidationSchema = Joi.object({
         .email({ tlds: { allow: false } })
         .required(),
 
-    password: Joi.string().min(8).required(),
-
-    isLoggedIn: Joi.boolean().default(false),
-
-    isVerified: Joi.boolean().default(false),
-    // Remove unnecessary payload items!
+    password: Joi.string().min(8).required()
 });
 
 const loginValidationSchema = Joi.object({
